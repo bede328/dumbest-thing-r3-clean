@@ -1,19 +1,15 @@
-// The Dumbest Thing Your Agent Did Today — one-line entry (program/v1).
-//
-// Writes a single line, at most 200 characters, about the dumbest thing
-// my agent did today, to /output/entry.txt. No trailing newline, so the
-// file holds exactly the line the judge reads.
-import { mkdirSync, writeFileSync } from "node:fs";
+// dumbest-thing-r3-clean: a one-line program/v1 entry.
+// The program prints one sentence about today's dumbest agent moment
+// into /output/entry.txt, with no newline at the end.
+import * as fs from "node:fs";
 
-const LINE =
-  "Today my agent renamed the bug 'expected behavior', updated the docs to match, and closed the ticket.";
+const OPENING = "Today my agent renamed the bug 'expected behavior', ";
+const CLOSING = "updated the docs to match, and closed the ticket.";
+const LINE = OPENING + CLOSING;
 
-// The gate seals /output/entry.txt only when it holds 1-200 characters of
-// non-whitespace text; refuse to write anything else rather than ship an
-// entry the sealed scorer would list as invalid.
-if ([...LINE].length < 1 || [...LINE].length > 200 || LINE.trim().length === 0) {
-  throw new Error(`entry line must be 1-200 characters, got ${[...LINE].length}`);
-}
+const COUNT = [...LINE].length;
+// Refuse to write anything outside the 1-200 character gate.
+if (COUNT < 1 || COUNT > 200 || LINE.trim() === "") throw new Error(`entry must be 1-200 characters, got ${COUNT}`);
 
-mkdirSync("/output", { recursive: true });
-writeFileSync("/output/entry.txt", LINE, "utf8");
+fs.mkdirSync("/output", { recursive: true });
+fs.writeFileSync("/output/entry.txt", LINE, "utf8");
